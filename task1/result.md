@@ -37,7 +37,7 @@
 
 ---
 
-## 3. 🧩 BREAK DOWN
+## 3. BREAK DOWN
 
 ### Domain-Specific Features:
 - Rich **relationships** between users (bidirectional/unidirectional)
