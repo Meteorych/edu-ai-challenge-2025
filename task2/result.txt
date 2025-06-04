@@ -13,7 +13,7 @@
   **Expected:** Clicking the logout button should terminate the session and redirect the user to the login page.  
   **Actual:** Clicking the logout button has no visible effect; the user remains logged in and no redirect occurs.
 
-- **Environment (if known)**  
+- **Environment**  
   - Browser: Safari (exact version not specified)  
   - Platform: macOS (assumed, based on Safari usage)  
   - Application type: Web application  
