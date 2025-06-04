@@ -1,0 +1,13 @@
+{
+  "summary": "The text examines the rise of remote work, especially following the global pandemic,
+      highlighting both its benefits—such as increased job satisfaction and reduced costs—and its drawbacks, including isolation and productivity challenges. 
+      It concludes that remote work is likely to persist, with hybrid models and advancing technology supporting its sustainability.",
+  "sentiment_class": "positive",
+  "sentiment_score": 0.3,
+  "metadata": {
+    "word_count": 238,
+    "sentence_count": 9,
+    "detected_language": "en",
+    "source_file_format": "docx"
+  }
+}
