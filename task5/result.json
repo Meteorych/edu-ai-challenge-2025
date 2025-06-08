@@ -1,0 +1,27 @@
+[
+  {
+    "sentiment": "Negative",
+    "isRelevant": true,
+    "mainSubject": "Sensor performance and hardware reliability",
+    "positives": [],
+    "painPoints": [
+      "sensor tracking drops intermittently",
+      "dongle did not work",
+      "persistent issue even when plugged in",
+      "high price not justified by performance"
+    ],
+    "improvementSuggestions": ["improve sensor stability", "ensure dongle reliability"],
+    "featuresMentioned": ["sensor", "dongle", "wired/wireless connectivity", "pricing"],
+    "userExpertise": "Experienced"
+  },
+  {
+    "sentiment": "Mixed",
+    "isRelevant": true,
+    "mainSubject": "Product value and pricing",
+    "positives": ["no flaws in design or function"],
+    "painPoints": ["price is too high for performance offered"],
+    "improvementSuggestions": ["adjust pricing to reflect actual performance benefit"],
+    "featuresMentioned": ["pricing", "performance"],
+    "userExpertise": "Experienced"
+  }
+]
