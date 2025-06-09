@@ -1,0 +1,30 @@
+PASS ./enigma.test.js
+  Enigma Machine
+    √ should correctly encrypt AAAAA to BDZGO (Wikipedia reference test) (2 ms)
+    √ should correctly encrypt and decrypt a message (reciprocity)
+    √ should correctly encrypt and decrypt with plugboard settings (1 ms)
+    √ should handle characters not in the alphabet
+    √ should produce different outputs for different initial positions (1 ms)
+
+-----------|---------|----------|---------|---------|-------------------
+File       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------|---------|----------|---------|---------|-------------------
+All files  |   79.16 |    66.66 |   68.42 |   77.94 |                   
+ enigma.js |   79.16 |    66.66 |   68.42 |   77.94 | 78,116-140,148    
+-----------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 79.16% ( 57/72 )
+Branches     : 66.66% ( 12/18 )
+Functions    : 68.42% ( 13/19 )
+Lines        : 77.94% ( 53/68 )
+================================================================================
+Jest: "global" coverage threshold for statements (80%) not met: 79.16%
+Jest: "global" coverage threshold for branches (80%) not met: 66.66%
+Jest: "global" coverage threshold for lines (80%) not met: 77.94%
+Jest: "global" coverage threshold for functions (80%) not met: 68.42%
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        0.974 s, estimated 1 s
+Ran all test suites.

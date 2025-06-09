@@ -1,0 +1,33 @@
+{
+  "name": "task6",
+  "version": "1.0.0",
+  "main": "enigma.js",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage --coverageReporters=text --coverageReporters=text-summary",
+    "test:report": "jest --coverage --coverageReporters=text --coverageReporters=text-summary > test_report.txt 2>&1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "*.js",
+      "!node_modules/**",
+      "!*.test.js",
+      "!package-lock.json"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
+  }
+}
