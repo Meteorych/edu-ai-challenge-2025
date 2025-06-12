@@ -1,0 +1,22 @@
+{
+  "name": "sea-battle-cli",
+  "version": "1.0.0",
+  "description": "Modernized Sea Battle (Battleship) command-line game with unit tests.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest --coverage"
+  },
+  "keywords": [
+    "battleship",
+    "cli",
+    "game",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.6.1"
+  }
+} 
