@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Modernized Sea Battle (Battleship) command-line game with unit tests.",
   "main": "src/index.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "test": "jest --coverage"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [
     "battleship",
@@ -14,7 +17,7 @@
     "game",
     "javascript"
   ],
-  "author": "",
+  "author": "Ivan Tsitlou & Cursor AI",
   "license": "MIT",
   "devDependencies": {
     "jest": "^29.6.1"

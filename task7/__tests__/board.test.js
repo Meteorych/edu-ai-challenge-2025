@@ -1,4 +1,4 @@
-const Board = require('../src/board');
+import Board from '../src/board.js';
 
 describe('Board', () => {
   test('placeShipRandomly places correct number of ships without collision', () => {

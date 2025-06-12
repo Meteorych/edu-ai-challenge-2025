@@ -1,4 +1,4 @@
-const Player = require('./player');
+import Player from './player.js';
 
 class CPUPlayer extends Player {
   constructor(name = 'CPU', boardSize = 10, shipConfig = { numberOfShips: 3, shipLength: 3 }) {
@@ -80,4 +80,4 @@ class CPUPlayer extends Player {
   }
 }
 
-module.exports = CPUPlayer; 
+export default CPUPlayer; 

@@ -1,6 +1,6 @@
-const readline = require('readline');
-const Player = require('./player');
-const CPUPlayer = require('./cpuPlayer');
+import readline from 'readline';
+import Player from './player.js';
+import CPUPlayer from './cpuPlayer.js';
 
 class Game {
   constructor(options = {}) {
@@ -134,4 +134,4 @@ class Game {
   }
 }
 
-module.exports = Game; 
+export default Game; 

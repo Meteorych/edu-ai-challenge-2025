@@ -1,5 +1,4 @@
-const CPUPlayer = require('../src/cpuPlayer');
-const Player = require('../src/player');
+import CPUPlayer from '../src/cpuPlayer.js';
 
 describe('CPUPlayer logic', () => {
   test('CPU selects unique coordinates over multiple turns', () => {

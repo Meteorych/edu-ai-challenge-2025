@@ -1,4 +1,4 @@
-const Ship = require('./ship');
+import Ship from './ship.js';
 
 class Board {
   /**
@@ -131,4 +131,4 @@ class Board {
   }
 }
 
-module.exports = Board; 
+export default Board; 
