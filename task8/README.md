@@ -26,7 +26,7 @@ npm install
 ## 🚀 Usage
 
 ```js
-const { Schema } = require("./schema");
+import { Schema } from "./schema.js";
 
 // 1. Build a schema
 const addressSchema = Schema.object({
@@ -89,7 +89,7 @@ A summary will be printed to the console and an HTML report saved to `coverage/`
 ## 📄 Project Structure
 
 ```text
-├── schema.js            # The validation library (exported via CommonJS)
+├── schema.js            # The validation library (ES module)
 ├── validation.test.js   # Jest test-suite
 ├── package.json         # npm metadata & scripts
 └── README.md            # This file
