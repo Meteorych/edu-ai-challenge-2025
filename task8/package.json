@@ -1,0 +1,17 @@
+{
+  "name": "validation-library",
+  "version": "1.0.0",
+  "description": "A simple yet powerful data validation library with comprehensive test suite.",
+  "main": "schema.js",
+  "scripts": {
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage"
+  },
+  "keywords": ["validation", "schema", "javascript"],
+  "author": "AI Assistant",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "type": "module"
+} 
