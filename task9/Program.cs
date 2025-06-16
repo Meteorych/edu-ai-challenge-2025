@@ -1,25 +1,25 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenAI;
-using OpenAI.Managers;
-using OpenAI.ObjectModels;
-using OpenAI.ObjectModels.RequestModels;
+﻿using Betalgo.Ranul.OpenAI;
+using Betalgo.Ranul.OpenAI.Managers;
+using Betalgo.Ranul.OpenAI.ObjectModels;
+using Betalgo.Ranul.OpenAI.ObjectModels.RequestModels;
 
-class Program
+namespace ServiceAnalyzer;
+
+internal static class Program
 {
-    static async Task Main(string[] args)
+    static async Task Main()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
         if (string.IsNullOrEmpty(apiKey))
         {
             Console.WriteLine("Error: OPENAI_API_KEY environment variable not set.");
             Console.WriteLine("Please set the environment variable and try again.");
+
             return;
         }
 
-        var openAiService = new OpenAIService(new OpenAiOptions()
+        var openAiService = new OpenAIService(new OpenAIOptions
         {
             ApiKey = apiKey
         });
@@ -30,6 +30,7 @@ class Program
         if (string.IsNullOrWhiteSpace(userInput))
         {
             Console.WriteLine("No input provided. Exiting.");
+
             return;
         }
 
@@ -37,11 +38,11 @@ class Program
 
         var completionResult = await openAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
         {
-            Messages = new[]
-            {
+            Messages =
+            [
                 new ChatMessage(StaticValues.ChatMessageRoles.System, BuildPrompt(userInput))
-            },
-            Model = Models.Gpt_4_1106_preview,
+            ],
+            Model = Models.Gpt_4_1_mini,
             MaxTokens = 1500
         });
 
@@ -64,36 +65,34 @@ class Program
         else
         {
             Console.WriteLine("\n--- Error ---");
-            if (completionResult.Error == null)
-            {
-                Console.WriteLine("Unknown error.");
-            }
-            else
-            {
-                Console.WriteLine($"Error: {completionResult.Error.Message}");
-            }
+
+            Console.WriteLine(completionResult.Error == null
+                ? "Unknown error."
+                : $"Error: {completionResult.Error.Message}");
         }
     }
 
     private static string BuildPrompt(string serviceInfo)
     {
-        return $@"
-Analyze the following service and generate a comprehensive, markdown-formatted report from multiple viewpoints—including business, technical, and user-focused perspectives.
+        return $"""
 
-Service Information:
-{serviceInfo}
+                Analyze the following service and generate a comprehensive, markdown-formatted report from multiple viewpoints—including business, technical, and user-focused perspectives.
 
-The report must include the following sections:
-- Brief History: Founding year, milestones, etc.
-- Target Audience: Primary user segments
-- Core Features: Top 2–4 key functionalities
-- Unique Selling Points: Key differentiators
-- Business Model: How the service makes money
-- Tech Stack Insights: Any hints about technologies used
-- Perceived Strengths: Mentioned positives or standout features
-- Perceived Weaknesses: Cited drawbacks or limitations
+                Service Information:
+                {serviceInfo}
 
-Please provide a detailed and well-structured report.
-";
+                The report must include the following sections:
+                - Brief History: Founding year, milestones, etc.
+                - Target Audience: Primary user segments
+                - Core Features: Top 2–4 key functionalities
+                - Unique Selling Points: Key differentiators
+                - Business Model: How the service makes money
+                - Tech Stack Insights: Any hints about technologies used
+                - Perceived Strengths: Mentioned positives or standout features
+                - Perceived Weaknesses: Cited drawbacks or limitations
+
+                Please provide a detailed and well-structured report.
+
+                """;
     }
 }
