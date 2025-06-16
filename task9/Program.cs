@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using OpenAI.GPT3;
-using OpenAI.GPT3.Managers;
-using OpenAI.GPT3.ObjectModels;
-using OpenAI.GPT3.ObjectModels.RequestModels;
+using OpenAI;
+using OpenAI.Managers;
+using OpenAI.ObjectModels;
+using OpenAI.ObjectModels.RequestModels;
 
 class Program
 {
@@ -41,13 +41,13 @@ class Program
             {
                 new ChatMessage(StaticValues.ChatMessageRoles.System, BuildPrompt(userInput))
             },
-            Model = Models.ChatGpt4_1106_preview,
+            Model = Models.Gpt_4_1106_preview,
             MaxTokens = 1500
         });
 
         if (completionResult.Successful)
         {
-            var report = completionResult.Choices.First().Message.Content;
+            var report = completionResult.Choices[0].Message.Content;
             Console.WriteLine("\n--- Generated Report ---");
             Console.WriteLine(report);
 
