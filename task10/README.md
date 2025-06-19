@@ -30,7 +30,8 @@ This is a console-based product search tool that uses natural language to find p
 
     ```powershell
     $env:OPENAI_API_KEY = "your_api_key_here"
-
+     ```
+    
     ```text
     *Note: This sets the variable for the current session only. For a permanent solution, you can set it through the System Properties window.*
 
