@@ -1,25 +1,27 @@
-﻿using OpenAI;
-using OpenAI.Managers;
-using OpenAI.ObjectModels;
-using OpenAI.ObjectModels.RequestModels;
+﻿using Betalgo.Ranul.OpenAI;
+using Betalgo.Ranul.OpenAI.Managers;
+using Betalgo.Ranul.OpenAI.ObjectModels;
+using Betalgo.Ranul.OpenAI.ObjectModels.RequestModels;
+using Betalgo.Ranul.OpenAI.ObjectModels.SharedModels;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace ProductSearch;
 
-class Program
+internal static class Program
 {
-    static async Task Main(string[] args)
+    private static async Task Main()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
         if (string.IsNullOrEmpty(apiKey))
         {
             Console.WriteLine("Error: OPENAI_API_KEY environment variable not set.");
             Console.WriteLine("Please set the environment variable and restart the application.");
+
             return;
         }
 
-        var openAiService = new OpenAIService(new OpenAiOptions() { ApiKey = apiKey });
+        var openAiService = new OpenAIService(new OpenAIOptions { ApiKey = apiKey });
 
         var productsJson = await File.ReadAllTextAsync("products.json");
 
@@ -31,85 +33,73 @@ class Program
         {
             Console.Write("> ");
             var userInput = Console.ReadLine();
+
             if (string.IsNullOrWhiteSpace(userInput) || userInput.Equals("exit", StringComparison.OrdinalIgnoreCase))
-            {
                 break;
-            }
+            
+            var filteredProducts = await GetFilteredProductsFromOpenAI(openAiService, productsJson, userInput);
 
-            try
+            if (filteredProducts.Count == 0)
             {
-                var filteredProducts = await GetFilteredProductsFromOpenAI(openAiService, productsJson, userInput);
+                Console.WriteLine("I couldn't find any products matching your criteria.");
+            }
+            else
+            {
+                Console.WriteLine("Filtered Products:");
 
-                if (filteredProducts.Count == 0)
+                for (var i = 0; i < filteredProducts.Count; i++)
                 {
-                    Console.WriteLine("I couldn't find any products matching your criteria.");
-                }
-                else
-                {
-                    Console.WriteLine("Filtered Products:");
-                    for (int i = 0; i < filteredProducts.Count; i++)
-                    {
-                        var p = filteredProducts[i];
-                        Console.WriteLine($"{i + 1}. {p.Name} - ${p.Price:0.00}, Rating: {p.Rating}, {(p.InStock ? "In Stock" : "Out of Stock")}");
-                    }
+                    var p = filteredProducts[i];
+                    Console.WriteLine($"{i + 1}. {p.Name} - ${p.Price:0.00}, Rating: {p.Rating}, {(p.InStock ? "In Stock" : "Out of Stock")}");
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
+            
             Console.WriteLine();
         }
     }
 
-    private static async Task<List<Product>> GetFilteredProductsFromOpenAI(IOpenAIService openAiService, string productsJson, string userInput)
+    private static async Task<List<Product>> GetFilteredProductsFromOpenAI(OpenAIService openAiService, string productsJson, string userInput)
     {
         var systemPrompt = $"""
-You are a product search assistant. Given a user's query and a list of available products, you will identify which products match the user's request.
-You must call the 'get_filtered_products' function with the products that meet the criteria.
-Do not make up products. Only use products from the provided list.
-If no products match, call the function with an empty list.
+                            You are a product search assistant. Given a user's query and a list of available products, you will identify which products match the user's request.
+                            You must call the 'get_filtered_products' function with the products that meet the criteria.
+                            Do not make up products. Only use products from the provided list.
+                            If no products match, call the function with an empty list.
 
-Here is the list of available products in JSON format:
-{productsJson}
-""";
+                            Here is the list of available products in JSON format:
+                            {productsJson}
+                            """;
 
-        var tools = new List<ToolDefinition>
+
+        var fn = new FunctionDefinition
         {
-            new()
-            {
-                Type = StaticValues.ToolTypes.Function,
-                Function = new FunctionDefinition
+            Name = "get_filtered_products",
+            Description = "Gets a list of products that match the user's criteria.",
+            Parameters = PropertyDefinition.DefineObject(
+                new Dictionary<string, PropertyDefinition>
                 {
-                    Name = "get_filtered_products",
-                    Description = "Gets a list of products that match the user's criteria.",
-                    Parameters = new JsonObject
-                    {
-                        ["type"] = "object",
-                        ["properties"] = new JsonObject
-                        {
-                            ["products"] = new JsonObject
+                    ["products"] = PropertyDefinition.DefineArray(
+                        PropertyDefinition.DefineObject(
+                            new Dictionary<string, PropertyDefinition>
                             {
-                                ["type"] = "array",
-                                ["items"] = new JsonObject
-                                {
-                                    ["type"] = "object",
-                                    ["properties"] = new JsonObject
-                                    {
-                                        ["name"] = new JsonObject { ["type"] = "string" },
-                                        ["category"] = new JsonObject { ["type"] = "string" },
-                                        ["price"] = new JsonObject { ["type"] = "number" },
-                                        ["rating"] = new JsonObject { ["type"] = "number" },
-                                        ["in_stock"] = new JsonObject { ["type"] = "boolean" }
-                                    },
-                                    ["required"] = new JsonArray("name", "category", "price", "rating", "in_stock")
-                                }
-                            }
-                        },
-                        ["required"] = new JsonArray("products")
-                    }
-                }
-            }
+                                ["name"] = PropertyDefinition.DefineString("Product name"),
+                                ["category"] = PropertyDefinition.DefineString("Product category"),
+                                ["price"] = PropertyDefinition.DefineNumber("Product price"),
+                                ["rating"] = PropertyDefinition.DefineNumber("Product rating"),
+                                ["in_stock"] = PropertyDefinition.DefineBoolean("Whether the product is in stock")
+                            },
+                            new List<string> { "name", "category", "price", "rating", "in_stock" },
+                            false,
+                            "A product object",
+                            null
+                        )
+                    )
+                },
+                new List<string> { "products" },
+                false,
+                "List of products matching the criteria",
+                null
+            )
         };
 
         var messages = new List<ChatMessage>
@@ -121,9 +111,9 @@ Here is the list of available products in JSON format:
         var request = new ChatCompletionCreateRequest
         {
             Messages = messages,
-            Model = Models.Gpt_4o,
-            Tools = tools,
-            ToolChoice = new ToolChoice { Type = StaticValues.ToolTypes.Function, Function = new FunctionName { Name = "get_filtered_products" } }
+            Model = Models.Gpt_4_1_mini,
+            Tools = new List<ToolDefinition> { ToolDefinition.DefineFunction(fn) },
+            ToolChoice = ToolChoice.Required
         };
 
         var response = await openAiService.ChatCompletion.CreateCompletion(request);
@@ -131,25 +121,22 @@ Here is the list of available products in JSON format:
         if (response.Successful)
         {
             var responseMessage = response.Choices.First().Message;
-            if (responseMessage.ToolCalls != null && responseMessage.ToolCalls.Any())
-            {
-                var toolCall = responseMessage.ToolCalls.First();
-                if (toolCall.Function?.Arguments != null)
-                {
-                    var productListWrapper = JsonSerializer.Deserialize<ProductListWrapper>(toolCall.Function.Arguments);
-                    return productListWrapper?.Products ?? new List<Product>();
-                }
-            }
-        }
-        else
-        {
-            if (response.Error == null)
-            {
-                throw new Exception("Unknown error from OpenAI API.");
-            }
-            throw new Exception(response.Error.Message);
+
+            if (responseMessage.ToolCalls == null || !responseMessage.ToolCalls.Any())
+                return [];
+
+            var toolCall = responseMessage.ToolCalls.First();
+
+            if (toolCall.FunctionCall?.Arguments == null)
+                return [];
+
+            var productListWrapper = JsonSerializer.Deserialize<ProductListWrapper>(toolCall.FunctionCall.Arguments);
+
+            return productListWrapper?.Products ?? [];
         }
 
-        return new List<Product>();
+        Console.WriteLine("Something went wrong with API call.");
+
+        return [];
     }
 }
