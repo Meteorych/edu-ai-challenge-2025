@@ -1,0 +1,38 @@
+{
+  "WordCount": 1015,
+  "SpeakingSpeedWpm": 150,
+  "FrequentlyMentionedTopics": [
+    {
+      "Topic": "Chest Pain Description",
+      "Mentions": 10
+    },
+    {
+      "Topic": "Heart Attack Concern",
+      "Mentions": 7
+    },
+    {
+      "Topic": "Symptom History",
+      "Mentions": 6
+    },
+    {
+      "Topic": "Past Medical and Family History",
+      "Mentions": 5
+    },
+    {
+      "Topic": "Recent Illness (Flu)",
+      "Mentions": 3
+    },
+    {
+      "Topic": "Medications and Treatment",
+      "Mentions": 3
+    },
+    {
+      "Topic": "Lifestyle Factors",
+      "Mentions": 3
+    },
+    {
+      "Topic": "Diagnostic Testing Plan",
+      "Mentions": 3
+    }
+  ]
+}
